@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>W02: Task 01</title>
+    <title>W02: Task 02</title>
   </head>
   <body>
     <script src="vec3.js"></script>
@@ -9,7 +9,7 @@
       var min = v1.min();
       var mid = v1.mid();
       var max = v1.max();
-      document.write("min" + min);
+      window.alert("min" + min);
       document.write("mid" + mid);
       document.write("max" + max);
     </script>

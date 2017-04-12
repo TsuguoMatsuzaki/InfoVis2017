@@ -47,7 +47,4 @@ Vec3.prototype.mid = function()
     if(min != this.z && max != this.z) return this.z;	   
 }
 
-Vec3.prototype.AreaOfTriangle(v0,v1,v2)
-{
-    return 0;
-}
+

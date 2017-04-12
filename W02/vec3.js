@@ -40,19 +40,11 @@ Vec3.prototype.max = function()
 
 Vec3.prototype.mid = function()
 {
-    var min = this.min();
+    var min = this.min()
     var max = this.max();
     if(min != this.x && max != this.x) return this.x;
     if(min != this.y && max != this.y) return this.y;
     if(min != this.z && max != this.z) return this.z;	   
 }
 
-Vec3.prototype.AreaOfTriangle(v0,v1,v2)
-{
-    var va = Vec3(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
-    var vb = Vec3(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
-    var ab_va_2 = Math.pow(va.x,2) + Math.pow(va.y,2) + Math.pow(va.z,2);
-    var ab_vb_2 = Math.pow(vb.x,2) + Math.pow(vb.y,2) + Math.pow(vb.z,2);
-    var inpr_2 = Math.pow(va.x*vb.x + va.y*vb.y + va.z*vb.z,2);
-    return (Math.sqrt(ab_va_2*ab_vb_2-inpr_2))/2;
-}
+

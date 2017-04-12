@@ -1,11 +1,11 @@
-Vecx = function(x,y,z)
+Vec3 = function(x,y,z)
 {
     this.x = x;
     this.y = y;
     this.z = z;
 }
 
-Vec.prototype.add = function(v)
+Vec3.prototype.add = function(v)
 {
     this.x += v.x;
     this.y += v.y;

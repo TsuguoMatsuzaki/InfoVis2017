@@ -1,0 +1,8 @@
+<html>
+  <head>
+    <title>W02:Example 07</title>
+  </head>
+  <body>
+    <script src="vec3.js"></script>
+    <script>
+      var v1 = new

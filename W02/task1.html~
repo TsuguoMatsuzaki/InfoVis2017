@@ -1,0 +1,12 @@
+<html>
+  <head>
+    <title>W2: Task 01</title>
+  </head>
+  <body>
+    <script src="vec3.js"></script>
+    <script>
+      var = v1 = new Vec3(5,4,8);
+      var min = v1.min()
+      </script>
+  </body>
+  </html>

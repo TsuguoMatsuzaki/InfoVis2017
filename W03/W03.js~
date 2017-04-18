@@ -1,0 +1,21 @@
+    <html>
+    <head>
+    
+</head>
+    <body>
+    <script src="three.min.js"></script>
+    
+    <script>
+    var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(
+    fov,
+    aspect,
+    near,
+    far
+);
+
+camera.position.set(x,y,z);
+
+</script>
+    </body>
+    </html>

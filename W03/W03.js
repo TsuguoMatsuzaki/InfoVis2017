@@ -4,7 +4,7 @@
 </head>
     <body>
     <script src="http://mrdoob.github.io/three.js/buid/three.min.js"></script>
-    <script src="main.js"></scropt>
+    <script src="main.js"></script>
     <script>
     var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(
@@ -18,6 +18,8 @@ var camera = new THREE.PerspectiveCamera(
 camera.position.set(x,y,z);
 
 sceme.add(camera);
+
+main();
 </script>
     </body>
     </html>

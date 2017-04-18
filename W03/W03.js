@@ -1,7 +1,7 @@
     <html>
     <head>
     <title>W04: Example 01</title>
-</head>
+    </head>
     <body>
     <script src="http://mrdoob.github.io/three.js/buid/three.min.js"></script>
     <script src="main.js"></script>

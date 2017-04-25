@@ -32,7 +32,7 @@ function main()
     var id = faces[0];
     var f0 = new THREE.Face3(id[0],id[1],id[2]);
     
-    var grometry = new THREE.Geometry();
+    var geometry = new THREE.Geometry();
     geometry.vertices.push(v0);
     geometry.vertices.push(v1);
     geometry.vertices.push(v2);
@@ -77,6 +77,7 @@ function main()
     
     //loop();
 
+    /*
     function loop()
     {
 	requestAnimationFrame( loop );
@@ -84,7 +85,7 @@ function main()
 	cube.rotation.y += 0.5;
 	cube.rotation.z += 0.5;
 
-	/*
+	
 	cube1.rotation.z += 0.01;
 	cube2.rotation.x += 0.5;
 	cube2.rotation.y += 0.5;
@@ -95,6 +96,6 @@ function main()
 	cube3.rotation.x += 0.5;
 
 	  
-	renderer.render( scene, camera );*/
-    }
+	renderer.render( scene, camera );
+    }*/
 }

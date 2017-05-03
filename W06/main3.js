@@ -82,7 +82,7 @@ function main()
 	
     ];
 
-    
+   /*
     var faces = [
 	[2,0,3],
 	[2,1,0],
@@ -97,41 +97,52 @@ function main()
 	[3,0,7],
 	[4,7,0]
     ];
+   */
+    
+
+    var faces = [
+	[0,1,2]
+    ];
+	
     
     //the number of triangle
     var count = 12;   
+    var triangle = new Array(count);
+
    
-    var geometry = new THREE.Geometry();
-    var material = new THREE.MeshBasicMaterial();
-
-    
-
-    
-    //add verteces
-    geometry.vertices.push(new THREE.Vector3(1, -1, 2)); //0
-    geometry.vertices.push(new THREE.Vector3(1, 1, 2)); //1
-    geometry.vertices.push(new THREE.Vector3(-1, 1, 2)); //2
-    geometry.vertices.push(new THREE.Vector3(-1, -1, 2)); //3
-    geometry.vertices.push(new THREE.Vector3(1, -1, 4)); //4
-    geometry.vertices.push(new THREE.Vector3(1, 1, 4)); //5
-    geometry.vertices.push(new THREE.Vector3(-1, 1, 4)); //6
-    geometry.vertices.push(new THREE.Vector3(-1, -1, 4)); //7
-
-    //add faces
     for(var i=0;i<count;i++){
-	var id = faces[i];		
-	geometry.faces.push(new THREE.Face3( id[0],id[1],id[2] ));  
+	var v0 = new THREE.Vector3().fromArray(vertices[0+3*i]);
+	var v1 = new THREE.Vector3().fromArray(vertices[1+3*i]);
+	var v2 = new THREE.Vector3().fromArray(vertices[2+3*i]);
+
+	var id = faces[0];
+	var f0 = new THREE.Face3(id[0], id[1], id[2]);
+
+	var geometry = new THREE.Geometry();
+	var material = new THREE.MeshBasicMaterial();
+
+	geometry.vertices.push(v0);
+	geometry.vertices.push(v1);
+	geometry.vertices.push(v2);
+	geometry.faces.push(f0);
+
+	//get normal vector
+	geometry.computeFaceNormals();
+	geometry.computeVertexNormals();
+	
+	//both side rendering
+	//material.side = THREE.DoubleSide
+
+	triangle[i] = new THREE.Mesh(geometry, material);
+	scene.add(triangle[i]);
     }
 
-    //get normal vector
-    geometry.computeFaceNormals();
-    geometry.computeVertexNormals();
+    
+  
 
-    //both side rendering
-    material.side = THREE.DoubleSide
 
-    var triangle = new THREE.Mesh(geometry, material);
-    scene.add(triangle);
+
+
     
     loop();
 
@@ -140,10 +151,11 @@ function main()
     {	
 	requestAnimationFrame( loop );
 
-	    triangle.rotation.x += 0.01;
-	    triangle.rotation.y += 0.01;
-	    triangle.rotation.z += 0.01;
-		
+	for(var i=0;i<count;i++){
+	    triangle[i].rotation.x += 0.01;
+	    triangle[i].rotation.y += 0.01;
+	    triangle[i].rotation.z += 0.01;
+	}
 	renderer.render( scene, camera );
     }
 
@@ -184,8 +196,8 @@ function main()
 
 
 
-	if(intersects.length > 0){	   
-	    intersects[0].face.color.setRGB(1,0,0);
+	if(intersects.length > 0){
+	    intersects[0].object.material.color.setRGB(1,0,0);
 	}
 
 

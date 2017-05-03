@@ -186,6 +186,7 @@ function main()
 
 	if(intersects.length > 0){	   
 	    intersects[0].face.color.setRGB(1,0,0);
+	    material.color.setRGB(1,0,0);
 	}
 
 

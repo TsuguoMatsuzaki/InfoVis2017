@@ -3,10 +3,6 @@ function main()
     var width = 500;
     var height = 500;
 
-
-
-
-
     var scene1 = new THREE.Scene();
     var scene2 = new THREE.Scene();
 
@@ -32,8 +28,8 @@ function main()
     document.body.appendChild( renderer2.domElement );
 
     
-    var geometry1 = new THREE.TorusKnotGeometry( 1, 0.3, 100, 20 );
-    var geometry2 = new THREE.TorusKnotGeometry( 1, 0.3, 100, 20 );
+    var geometry = new THREE.TorusKnotGeometry( 1.1, 0.2, 150, 50 );
+
     
     //    var material = new THREE.MeshLambertMaterial();
 
@@ -62,10 +58,11 @@ function main()
     });
     
     
-    var torus_knot1 = new THREE.Mesh( geometry1, material1 );
+    var torus_knot1 = new THREE.Mesh( geometry, material1 );
     scene1.add( torus_knot1 );
-    var torus_knot2 = new THREE.Mesh( geometry2, material2 );
+    var torus_knot2 = new THREE.Mesh( geometry, material2 );
     scene2.add( torus_knot2 );
+
     
     loop();
 
@@ -75,8 +72,8 @@ function main()
         torus_knot1.rotation.x += 0.01;
         torus_knot1.rotation.y += 0.01;
 	
-	torus_knot2.rotation.x -= 0.01;
-        torus_knot2.rotation.y -= 0.01;
+	torus_knot2.rotation.x += 0.01;
+        torus_knot2.rotation.y += 0.01;
 
         renderer1.render( scene1, camera );
 	renderer2.render( scene2, camera );

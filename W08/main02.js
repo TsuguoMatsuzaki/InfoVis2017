@@ -3,7 +3,8 @@ function main()
     var width = 500;
     var height = 500;
 
-    var scene = new THREE.Scene();
+    var scene1 = new THREE.Scene();
+    var scene2 = new THREE.Scene();
 
     var fov = 45;
     var aspect = width / height;
@@ -11,17 +12,23 @@ function main()
     var far = 1000;
     var camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
     camera.position.set( 0, 0, 5 );
-    scene.add( camera );
+    scene1.add( camera );
+    scene2.add( camera );
 
     var light = new THREE.PointLight();
     light.position.set( 5, 5, 5 );
-    scene.add( light );
+    scene1.add( light );
+    scene2.add( light );
 
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setSize( width, height );
-    document.body.appendChild( renderer.domElement );
+    var renderer1 = new THREE.WebGLRenderer();
+    renderer1.setSize( width, height );
+    document.body.appendChild( renderer1.domElement );
+    var renderer2 = new THREE.WebGLRenderer();
+    renderer2.setSize( 100, 200 );
+    document.body.appendChild( renderer2.domElement );
 
-    var geometry = new THREE.TorusKnotGeometry( 1, 0.3, 100, 20 );
+    var geometry1 = new THREE.TorusKnotGeometry( 1, 0.3, 100, 20 );
+    var geometry2 = new THREE.TorusKnotGeometry( 1, 0.3, 100, 20 );
     //    var material = new THREE.MeshLambertMaterial();
 
 /*
@@ -31,26 +38,39 @@ function main()
 	fragmentShader: document.getElementById('shader.frag').text
     });
 */
-    var material = new THREE.ShaderMaterial({
+    var material1 = new THREE.ShaderMaterial({
 	vertexColors: THREE.VertexColors,
-	vertexShader: document.getElementById('phong.vert').text,
-	fragmentShader: document.getElementById('phong.frag').text,
+	vertexShader: document.getElementById('phong1.vert').text,
+	fragmentShader: document.getElementById('phong1.frag').text,
+	uniforms: {
+	    light_position: {type: 'v3', value: light.position}
+	}
+    });
+    var material2 = new THREE.ShaderMaterial({
+	vertexColors: THREE.VertexColors,
+	vertexShader: document.getElementById('phong2.vert').text,
+	fragmentShader: document.getElementById('phong2.frag').text,
 	uniforms: {
 	    light_position: {type: 'v3', value: light.position}
 	}
     });
     
     
-    var torus_knot = new THREE.Mesh( geometry, material );
-    scene.add( torus_knot );
+    var torus_knot1 = new THREE.Mesh( geometry1, material1 );
+    scene1.add( torus_knot1 );
+    var torus_knot2 = new THREE.Mesh( geometry2, material2 );
+    scene1.add( torus_knot2 );
 
     loop();
 
     function loop()
     {
         requestAnimationFrame( loop );
-        torus_knot.rotation.x += 0.01;
-        torus_knot.rotation.y += 0.01;
-        renderer.render( scene, camera );
+        torus_knot1.rotation.x += 0.01;
+        torus_knot1.rotation.y += 0.01;
+	torus_knot2.rotation.x -= 0.01;
+        torus_knot2.rotation.y -= 0.01;
+        renderer1.render( scene1, camera );
+	renderer2.render( scene2, camera );
     }
 }

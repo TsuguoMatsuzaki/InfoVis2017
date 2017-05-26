@@ -32,12 +32,12 @@ function main()
     ];
 
     var scalars = [
-        0,   // S0
-        128, // S1
-        255  // S2
+	0.1, //S0
+	0.2, //S1
+	0.8  //S2
     ];
-
-    // Create color map
+    
+    // Create a color map
     var cmap = [];
     for ( var i = 0; i < 256; i++ )
     {
@@ -49,10 +49,7 @@ function main()
         cmap.push( [ S, '0x' + color.getHexString() ] );
     }
 
-<<<<<<< HEAD
-
-=======
-    // Draw color map
+    // Draw the color map
     var lut = new THREE.Lut( 'rainbow', cmap.length );
     lut.addColorMap( 'mycolormap', cmap );
     lut.changeColorMap( 'mycolormap' );
@@ -61,7 +58,6 @@ function main()
         'position': { 'x': 0.6, 'y': -1.1, 'z': 2 },
         'dimensions': { 'width': 0.15, 'height': 1.2 }
     } ) );
->>>>>>> 30830e66b1aa96991a690e305ad4ad5ec5f0e2b8
 
     var geometry = new THREE.Geometry();
     var material = new THREE.MeshBasicMaterial();
@@ -81,24 +77,27 @@ function main()
         geometry.faces.push( face );
     }
 
-    // Assign colors for each vertex
+
+    //change
     material.vertexColors = THREE.VertexColors;
     for ( var i = 0; i < nfaces; i++ )
     {
-<<<<<<< HEAD
-	    var id = geometry.faces[i];	
-=======
         var id = faces[i];
->>>>>>> 30830e66b1aa96991a690e305ad4ad5ec5f0e2b8
         var S0 = scalars[ id[0] ];
         var S1 = scalars[ id[1] ];
         var S2 = scalars[ id[2] ];
-        var C0 = new THREE.Color().setHex( cmap[ S0 ][1] );
-        var C1 = new THREE.Color().setHex( cmap[ S1 ][1] );
-        var C2 = new THREE.Color().setHex( cmap[ S2 ][1] );
+
+	//normalization
+	var n_S0 = Math.floor((S0 - S0)/(S2 - S0)*255);
+	var n_S1 = Math.floor((S1 - S0)/(S2 - S0)*255);
+	var n_S2 = Math.floor((S2 - S0)/(S2 - S0)*255);
+	
+        var C0 = new THREE.Color().setHex( cmap[ n_S0 ][1] );  //S0 = 0.1
+        var C1 = new THREE.Color().setHex( cmap[ n_S1 ][1] );  //S1 = 0.2
+        var C2 = new THREE.Color().setHex( cmap[ n_S2 ][1] );  //S2 = 0.8
         geometry.faces[i].vertexColors.push( C0 );
         geometry.faces[i].vertexColors.push( C1 );
-        geometry.faces[i].vertexColors.push( C2 );
+        geometry.faces[i].vertexColors.push( C2 );	
     }
 
     var triangle = new THREE.Mesh( geometry, material );
@@ -111,8 +110,4 @@ function main()
         requestAnimationFrame( loop );
         renderer.render( scene, camera );
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 30830e66b1aa96991a690e305ad4ad5ec5f0e2b8

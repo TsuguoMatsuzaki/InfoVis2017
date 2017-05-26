@@ -151,8 +151,18 @@ function Isosurfaces( volume, isovalue )
         return index;
     }
 
-    function interpolated_vertex( v0, v1, s )
+    function interpolated_vertex( v0, v1, p ) //(v0, v1, s)
     {
-        return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
+	//set this vector to (v0+v1)/2
+        //return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
+
+	//-1 <= p <= 1
+	var x = (v0.x + v1.x)/2 + (v1.x - v0.x)/2 * p;
+	var y = (v0.y + v1.y)/2 + (v1.y - v0.y)/2 * p;
+	var z = (v0.z + v1.z)/2 + (v1.z - v0.z)/2 * p;	    
+	return new THREE.Vector3(x,y,z);
+	
+
+	
     }
 }

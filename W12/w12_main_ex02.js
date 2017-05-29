@@ -12,7 +12,7 @@ function main()
     var bounds = Bounds( volume );
     screen.scene.add( bounds );
 
-    var isovalue = 80;
+    var isovalue = 180;
     var surfaces = Isosurfaces( volume, isovalue );
     screen.scene.add( surfaces );
 

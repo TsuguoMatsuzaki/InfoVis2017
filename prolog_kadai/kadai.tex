@@ -1,0 +1,139 @@
+\documentclass[a4j]{jarticle}
+\usepackage{alltt}
+\usepackage{proof}
+\usepackage[dvipdfmx]{graphicx,color}
+\newcommand{\CAL}[1]{\mbox{${\cal #1}$}}
+\newcommand{\drv}{\longrightarrow}
+\newcommand{\lra}{\longrightarrow}
+\newcommand{\imp}{\supset}
+
+\title{プログラミング言語特論レポート}
+\author{情知 太郎 (171x222x)}
+\date{平成29年06月14日}
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{論理式の書き方}
+
+\begin{itemize}
+\item $p(x)\land q(x)$
+\begin{verbatim}
+  $p(x)\land q(x)$
+\end{verbatim}
+\item $p(x)\imp q(x)$
+\begin{verbatim}
+  $p(x)\imp q(x)$
+\end{verbatim}
+\item $\forall x. p(x)$
+\begin{verbatim}
+  $\forall x. p(x)$
+\end{verbatim}
+\item $\exists x. p(x)$
+\begin{verbatim}
+  $\exists x. p(x)$
+\end{verbatim}
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{証明図の書き方}
+証明図を書くために，\texttt{proof.sty}を使います．
+\begin{itemize}
+\item 一般形
+\begin{verbatim}
+\[
+ \infer[規則1]{A_1, \ldots , A_n}{B_1,\ldots , B_m}
+\]
+\end{verbatim}
+と書くと，以下のように表示されます．
+\[
+ \infer[規則1]{A_1, \ldots , A_n}{B_1,\ldots , B_m}
+\]
+\item $\land$R規則
+\begin{verbatim}
+\[
+\infer[\land R]{\CAL{P}\drv G_1\land G_2}{
+  \CAL{P}\drv G_1 & \CAL{P}\drv G_2
+}
+\]
+\end{verbatim}
+と書くと，以下のように表示されます．
+\[
+\infer[\land R]{\CAL{P}\drv G_1\land G_2}{
+  \CAL{P}\drv G_1 & \CAL{P}\drv G_2
+}
+\]
+\item $decide$規則
+\begin{verbatim}
+\[
+\infer[decide]{\CAL{P}\drv A}{
+  \CAL{P}\stackrel{D}{\drv} A
+}
+\]
+\end{verbatim}
+と書くと，以下のように表示されます．
+\[
+\infer[decide]{\CAL{P}\drv A}{
+  \CAL{P}\stackrel{D}{\drv} A
+}
+\]
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Prologと証明図 }
+
+\begin{itemize}
+\item 以下はPrologプログラムの例です．
+\begin{alltt}
+  % プログラム
+  app([], Y, Y).
+  app([X|Xs], Y, [X|Zs]) :- app(Xs, Y, Zs).
+
+  % ゴール
+  ?- app([1,2], [3,4], W).
+  W = [1, 2, 3, 4] 
+  Yes
+\end{alltt}
+
+\item 以下はPrologプログラムのトレース例です．
+\begin{alltt}
+  ?- trace.
+  Yes
+  [trace]  ?- app([1,2], [3,4], W).
+     {\color{red}Call: (7)} app([1, 2], [3, 4], _G316) ? 
+     {\color{green}Call: (8)} app([2], [3, 4], _G379) ? 
+     {\color{blue}Call: (9)} app([], [3, 4], _G382) ? 
+     {\color{blue}Exit: (9)} app([], [3, 4], [3, 4]) ? 
+     {\color{green}Exit: (8)} app([2], [3, 4], [2, 3, 4]) ? 
+     {\color{red}Exit: (7)} app([1, 2], [3, 4], [1, 2, 3, 4]) ? 
+  X = [1, 2, 3, 4] 
+  Yes
+\end{alltt}
+
+\item 以下は，プログラムとゴールを論理式で表した例です．
+\begin{alltt}
+% プログラム
+app([], Y, Y).
+app([X|Xs], Y, [X|Zs]) :- app(Xs, Y, Zs).
+\end{alltt}
+\qquad\qquad $\Downarrow$
+\begin{flushleft}{\color{red}
+\(\forall y.app([], y, y) \) \\
+\(\forall x,x_s,y,z_s.(app(x_s,y,z_s)\imp app([x|x_s],y,[x|z_s]) \) }
+\end{flushleft}
+
+\begin{alltt}
+% ゴール
+?- app([1,2], [3,4], W).
+\end{alltt}
+\qquad\qquad$\Downarrow$
+\begin{flushleft}{\color{red}
+\(\exists w.app([1,2],[3,4],w)\)} 
+\end{flushleft}
+\end{itemize}
+
+\section{証明木 }
+\[
+\infer[\exists R\]{\CAL{P}\drv G_1\land G_2}{
+    \CAL{P}\drv G_1 & \CAL{P}\drv G_2
+  }
+\]
+\end{document}

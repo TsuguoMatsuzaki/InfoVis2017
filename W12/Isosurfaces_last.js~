@@ -3,6 +3,9 @@ function Isosurfaces( volume, isovalue )
     var geometry = new THREE.Geometry();
     var material = new THREE.MeshLambertMaterial();
 
+    var light = new THREE.PointLight();
+    light.position.set(5,5,5);
+    
     var smin = volume.min_value;
     var smax = volume.max_value;
     isovalue = KVS.Clamp( isovalue, smin, smax );
@@ -64,9 +67,6 @@ function Isosurfaces( volume, isovalue )
         cell_index += volume.resolution.x;
     }
 
-  
-
-   // material.color = new THREE.Color( "white" );
 
 
     // Create color map
@@ -81,27 +81,22 @@ function Isosurfaces( volume, isovalue )
         cmap.push( [ S, '0x' + color.getHexString() ] );
     }
       
-    var nfaces = geometry.faces.length;
-    
-    // Assign colors for each vertex
-    material.vertexColors = THREE.VertexColors;
-    for ( var i = 0; i < nfaces; i++ )
-    {
-	//geometry.faces.pushは配列の後ろに追加している？
-	var S0 = volume.values[ i ][0];
-	var S1 = volume.values[ i+1 ][0];
-	var S2 = volume.values[ i+2 ][0];
-	
-        var C0 = new THREE.Color().setHex( cmap[ S0 ][1] );
-        var C1 = new THREE.Color().setHex( cmap[ S1 ][1] );
-        var C2 = new THREE.Color().setHex( cmap[ S2 ][1] );
-        geometry.faces[i].vertexColors.push( C0 );
-        geometry.faces[i].vertexColors.push( C1 );
-        geometry.faces[i].vertexColors.push( C2 );
-    }
 
+    var material = new THREE.ShaderMaterial({
+	vertexColors: THREE.VertexColors,
+	vertexShader: document.getElementById('phong.vert').text,
+	fragmentShader: document.getElementById('phong.frag').text,
+	uniforms: {
+	    light_position: {type: 'v3', value: light.position}
+	}
+    });
     
 
+    material.color = new THREE.Color().setHex( cmap[isovalue][1] );
+
+
+
+    
     geometry.computeVertexNormals();
 
     
@@ -151,18 +146,21 @@ function Isosurfaces( volume, isovalue )
         return index;
     }
 
-    function interpolated_vertex( v0, v1, p ) //(v0, v1, s)
-    {
-	//set this vector to (v0+v1)/2
-        //return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
-
-	//-1 <= p <= 1
-	var x = (v0.x + v1.x)/2 + (v1.x - v0.x)/2 * p;
-	var y = (v0.y + v1.y)/2 + (v1.y - v0.y)/2 * p;
-	var z = (v0.z + v1.z)/2 + (v1.z - v0.z)/2 * p;	    
-	return new THREE.Vector3(x,y,z);
+    function interpolated_vertex( v0, v1, s )     {
+	//index of v0 and v1 in data of volume(KVS)
+	var index_v0 = v0.x + v0.y*volume.resolution.x + v0.z*volume.resolution.y*volume.resolution.x;
+	var index_v1 = v1.x + v1.y*volume.resolution.x + v1.z*volume.resolution.y*volume.resolution.x;
 	
+	//value of v0 and v1
+	var s0 = volume.values[ index_v0 ][0];
+	var s1 = volume.values[ index_v1 ][0];
 
-	
+	var t = (s-s0)/(s1-s0);
+
+	var nx = v0.x + t*(v1.x - v0.x);
+	var ny = v0.y + t*(v1.y - v0.y);
+	var nz = v0.z + t*(v1.z - v0.z);
+
+	return new THREE.Vector3(nx, ny, nz);
     }
 }

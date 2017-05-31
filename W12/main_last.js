@@ -4,7 +4,7 @@ function main()
     var screen = new KVS.THREEScreen();
 
     screen.init( volume, {
-        width: window.innerWidth,
+        width: window.innerWidth*0.8,
         height: window.innerHeight,
         enableAutoResize: false
     });
@@ -12,7 +12,7 @@ function main()
     var bounds = Bounds( volume );
     screen.scene.add( bounds );
 
-    var isovalue = 128;
+    var isovalue = 180;
     var surfaces = Isosurfaces( volume, isovalue );
     screen.scene.add( surfaces );
 
@@ -21,7 +21,7 @@ function main()
     });
 
     window.addEventListener( 'resize', function() {
-        screen.resize( [ window.innerWidth, window.innerHeight ] );
+        screen.resize( [ window.innerWidth*0.8, window.innerHeight ] );
     });
 
     screen.loop();

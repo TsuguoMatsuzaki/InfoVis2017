@@ -3,10 +3,15 @@ function Isosurfaces( volume, isovalue )
     var geometry = new THREE.Geometry();
     var material = new THREE.MeshLambertMaterial();
 
+    var light = new THREE.PointLight();
+    light.position.set(5,5,5);
+    
     var smin = volume.min_value;
     var smax = volume.max_value;
     isovalue = KVS.Clamp( isovalue, smin, smax );
 
+
+    
     var lut = new KVS.MarchingCubesTable();
     var cell_index = 0;
     var counter = 0;
@@ -52,6 +57,7 @@ function Isosurfaces( volume, isovalue )
                     var id0 = counter++;
                     var id1 = counter++;
                     var id2 = counter++;
+
                     geometry.faces.push( new THREE.Face3( id0, id1, id2 ) );	
 		    
                 }
@@ -61,9 +67,6 @@ function Isosurfaces( volume, isovalue )
         cell_index += volume.resolution.x;
     }
 
-
-
-   // material.color = new THREE.Color( "white" );
 
 
     // Create color map
@@ -77,33 +80,23 @@ function Isosurfaces( volume, isovalue )
         var color = new THREE.Color( R, G, B );
         cmap.push( [ S, '0x' + color.getHexString() ] );
     }
+      
+
+    var material = new THREE.ShaderMaterial({
+	vertexColors: THREE.VertexColors,
+	vertexShader: document.getElementById('phong_PhongReflection.vert').text,
+	fragmentShader: document.getElementById('phong_PhongReflection.frag').text,
+	uniforms: {
+	    light_position: {type: 'v3', value: light.position}
+	}
+    });
+    
+
+    material.color = new THREE.Color().setHex( cmap[isovalue][1] );
+
+
 
     
-    
-    
-
-var nfaces = geometry.faces.length;
-        
-        // Assign colors for each vertex
-        material.vertexColors = THREE.VertexColors;
-        for ( var i = 0; i < nfaces; i++ )
-        {   
-        var id = geometry.faces[i];
-        
-        var S0 = volume.values[ id[0] ][0];
-        var S1 = volume.values[ id[1] ][0];
-        var S2 = volume.values[ id[2] ][0];
-        
-            var C0 = new THREE.Color().setHex( cmap[ S0 ][1] );
-            var C1 = new THREE.Color().setHex( cmap[ S1 ][1] );
-            var C2 = new THREE.Color().setHex( cmap[ S2 ][1] );
-            geometry.faces[i].vertexColors.push( C0 );
-            geometry.faces[i].vertexColors.push( C1 );
-            geometry.faces[i].vertexColors.push( C2 );
-        }
-
-        
-
     geometry.computeVertexNormals();
 
     
@@ -138,9 +131,8 @@ var nfaces = geometry.faces.length;
         var s6 = volume.values[ indices[6] ][0];
         var s7 = volume.values[ indices[7] ][0];
 
-        
-        
 
+	
         var index = 0;
         if ( s0 > isovalue ) { index |=   1; }
         if ( s1 > isovalue ) { index |=   2; }
@@ -154,8 +146,21 @@ var nfaces = geometry.faces.length;
         return index;
     }
 
-    function interpolated_vertex( v0, v1, s )
-    {
-        return new THREE.Vector3().addVectors( v0, v1 ).divideScalar( 2 );
+    function interpolated_vertex( v0, v1, s )     {
+	//index of v0 and v1 in data of volume(KVS)
+	var index_v0 = v0.x + v0.y*volume.resolution.x + v0.z*volume.resolution.y*volume.resolution.x;
+	var index_v1 = v1.x + v1.y*volume.resolution.x + v1.z*volume.resolution.y*volume.resolution.x;
+	
+	//value of v0 and v1
+	var s0 = volume.values[ index_v0 ][0];
+	var s1 = volume.values[ index_v1 ][0];
+
+	var t = (s-s0)/(s1-s0);
+
+	var nx = v0.x + t*(v1.x - v0.x);
+	var ny = v0.y + t*(v1.y - v0.y);
+	var nz = v0.z + t*(v1.z - v0.z);
+
+	return new THREE.Vector3(nx, ny, nz);
     }
 }

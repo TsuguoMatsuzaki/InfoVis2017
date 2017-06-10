@@ -1,0 +1,3 @@
+function change_Isovalue(isovalue){
+    window.alert(isovalue);
+}

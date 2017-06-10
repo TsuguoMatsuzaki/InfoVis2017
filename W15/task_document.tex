@@ -1,0 +1,43 @@
+\documentclass[11pt,a4paper]{jsarticle}
+%
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{ascmac}
+%
+\setlength{\textwidth}{\fullwidth}
+\setlength{\textheight}{40\baselineskip}
+\addtolength{\textheight}{\topskip}
+\setlength{\voffset}{-0.2in}
+\setlength{\topmargin}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+%
+\newcommand{\divergence}{\mathrm{div}\,}  %ダイバージェンス
+\newcommand{\grad}{\mathrm{grad}\,}  %グラディエント
+\newcommand{\rot}{\mathrm{rot}\,}  %ローテーション
+%
+\title{情報可視化論2017 最終レポート（プログラムの説明）}
+\author{学籍番号 171x222x　　松崎 継生}
+\date{\today}
+\begin{document}
+\maketitle
+%
+
+今回作成したプログラムは以下の特徴を持っている．
+
+\begin{itemize}
+\item ロブスターのボリュームデータ（スカラー値）を用いている．
+\item ボリュームデータは，任意の閾値を用いた線形補間によって作られた三角形のポリゴンとして可視化されている．
+\item 可視化データのShadingとしてPhong Shading，ReflectionとしてPhong Reflectionを採用している．
+\item 可視化データの色は，Rainbow color mapに閾値の最小値・最大値である0～255を対応させたものから，閾値を用いて決定している．
+\item ウィンドウ左側にUIとして，マウスを用いて閾値をバーとボタンで決定し，その新しい閾値を用いて可視化データを更新するような機能を追加している．
+\end{itemize}
+
+今回プログラムを作るにあたって，あまり多用するべきではないグローバル変数を使用している．
+HTMLファイル（task\_last.html）でのボタンイベントの際に用いるonClick()の引数として，type=''range''のバーより得られた新しい閾値を用いようとしたが，その閾値がどの変数に入っているかがわからず，結果としてグローバル変数を用いた．
+また，新しい閾値を用いて可視化データを更新するchange\_Isovalue.jsでは，sceneに追加するmeshデータsurfaces，画面表示のためのscreen，ロブスターのボリュームデータvolumeもグローバル変数として使用している．
+
+%
+%
+\end{document}
